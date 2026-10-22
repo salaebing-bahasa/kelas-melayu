@@ -16,39 +16,36 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; }
         body { background-color: var(--light); color: var(--dark); line-height: 1.6; font-size: 16px; }
         header { background: linear-gradient(135deg, var(--primary), #2C6B56); color: white; padding: 1.5rem 1rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header h1 { font-size: 1.4rem; margin-bottom: 0.3rem; }
-        header p { font-size: 0.9rem; opacity: 0.9; }
+        header h1 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+        header p { font-size: 0.85rem; opacity: 0.9; }
         
         .container { max-width: 800px; margin: 15px auto; padding: 0 10px; }
         
-        /* เมนูเลือกบทเรียนแบบเลื่อนได้บนมือถือ */
+        /* เมนูบทเรียนเลื่อนได้บนมือถือ */
         .nav-tabs { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: thin; }
-        .tab-btn { background: white; border: 2px solid var(--primary); color: var(--primary); padding: 10px 16px; border-radius: 20px; cursor: pointer; font-weight: 500; white-space: nowrap; min-height: 44px; transition: all 0.3s; }
+        .tab-btn { background: white; border: 2px solid var(--primary); color: var(--primary); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 500; white-space: nowrap; min-height: 40px; transition: all 0.3s; }
         .tab-btn.active, .tab-btn:hover { background: var(--primary); color: white; }
 
         .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        h2 { color: var(--primary); margin-bottom: 12px; font-size: 1.25rem; border-bottom: 2px solid var(--accent); padding-bottom: 6px; }
-        p { margin-bottom: 10px; }
+        h2 { color: var(--primary); margin-bottom: 12px; font-size: 1.2rem; border-bottom: 2px solid var(--accent); padding-bottom: 6px; }
+        h3 { color: var(--secondary); margin: 15px 0 8px 0; font-size: 1.05rem; }
+        p { margin-bottom: 10px; font-size: 0.95rem; }
 
-        .vocab-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 15px; }
-        .vocab-item { background: var(--accent); border-radius: 8px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--primary); }
-        .vocab-info .ms { font-weight: 700; color: var(--primary); font-size: 1.05rem; }
+        .vocab-item, .dialogue-item { background: var(--accent); border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--primary); }
+        .vocab-info .ms { font-weight: 700; color: var(--primary); font-size: 1rem; }
         .vocab-info .th { color: #555; font-size: 0.9rem; }
         
-        .audio-btn { background: var(--secondary); border: none; color: white; min-width: 44px; min-height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: transform 0.2s; flex-shrink: 0; }
-        .audio-btn:active { transform: scale(0.95); }
-
-        .info-box { background: #fff8e1; border-left: 4px solid var(--secondary); padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 0.95rem; }
+        .audio-btn { background: var(--secondary); border: none; color: white; min-width: 40px; min-height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
         
-        .quiz-container { margin-top: 15px; }
-        .question { font-weight: 600; margin-bottom: 8px; font-size: 1.05rem; }
-        .options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-        .option-btn { background: #fff; border: 1px solid #ccc; padding: 12px 15px; border-radius: 8px; text-align: left; cursor: pointer; min-height: 44px; font-size: 1rem; transition: background 0.2s; }
+        .section-box { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .culture-box { background: #fff8e1; border-left: 4px solid var(--secondary); padding: 12px; border-radius: 6px; margin-top: 15px; font-size: 0.9rem; }
+
+        .options { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .option-btn { background: #fff; border: 1px solid #ccc; padding: 10px 12px; border-radius: 6px; text-align: left; cursor: pointer; font-size: 0.95rem; }
         .option-btn.correct { background: #d4edda; border-color: #c3e6cb; color: #155724; font-weight: 600; }
         .option-btn.incorrect { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
 
         footer { text-align: center; padding: 15px; color: #777; font-size: 0.85rem; }
-        
         .section-content { display: none; }
         .section-content.active { display: block; }
     </style>
@@ -61,263 +58,112 @@
     </header>
 
     <div class="container">
-        <!-- เมนูบาร์เลื่อนเลือกบทเรียน -->
+        <!-- เมนูเลือกบทเรียน -->
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('intro')">หน้าแรก</button>
-            <button class="tab-btn" onclick="switchTab('ch1')">บทที่ 1</button>
-            <button class="tab-btn" onclick="switchTab('ch2')">บทที่ 2</button>
-            <button class="tab-btn" onclick="switchTab('ch3')">บทที่ 3</button>
-            <button class="tab-btn" onclick="switchTab('ch4')">บทที่ 4</button>
-            <button class="tab-btn" onclick="switchTab('ch5')">บทที่ 5</button>
-            <button class="tab-btn" onclick="switchTab('ch6')">บทที่ 6</button>
-            <button class="tab-btn" onclick="switchTab('ch7')">บทที่ 7</button>
-            <button class="tab-btn" onclick="switchTab('ch8')">บทที่ 8</button>
-            <button class="tab-btn" onclick="switchTab('ch9')">บทที่ 9</button>
-            <button class="tab-btn" onclick="switchTab('ch10')">บทที่ 10</button>
-            <button class="tab-btn" onclick="switchTab('ch11')">บทที่ 11</button>
-            <button class="tab-btn" onclick="switchTab('ch12')">บทที่ 12</button>
-            <button class="tab-btn" onclick="switchTab('quiz')">แบบทดสอบ</button>
+            <button class="tab-btn" onclick="switchTab('ch3')">บทที่ 3: ทักทาย</button>
+            <button class="tab-btn" onclick="switchTab('ch4')">บทที่ 4: ทำความรู้จัก</button>
+            <button class="tab-btn" onclick="switchTab('ch5')">บทที่ 5: มหาวิทยาลัย</button>
+            <button class="tab-btn" onclick="switchTab('ch6')">บทที่ 6: ตัวเลข</button>
+            <button class="tab-btn" onclick="switchTab('ch7')">บทที่ 7: วันเดือนปี</button>
+            <button class="tab-btn" onclick="switchTab('ch8')">บทที่ 8: เวลา</button>
+            <button class="tab-btn" onclick="switchTab('ch9')">บทที่ 9: ครอบครัว</button>
+            <button class="tab-btn" onclick="switchTab('ch10')">บทที่ 10: ผลไม้</button>
+            <button class="tab-btn" onclick="switchTab('ch11')">บทที่ 11: ภัตตาคาร</button>
+            <button class="tab-btn" onclick="switchTab('ch12')">บทที่ 12: ซุปเปอร์มาเก็ต</button>
         </div>
 
         <!-- หน้าแรก -->
         <div id="intro" class="section-content active">
             <div class="card">
                 <h2>ยินดีต้อนรับสู่วิชาภาษามลายูในชีวิตประจำวัน</h2>
-                <div class="info-box">เว็บไซต์นี้จัดทำขึ้นเพื่อให้นิสิตใช้ศึกษาด้วยตนเอง ฝึกฟังเสียงคำศัพท์ และทบทวนบทเรียนผ่านสมาร์ทโฟนได้อย่างสะดวก</div>
-                <p><strong>อาจารย์ผู้รับผิดชอบรายวิชา:</strong></p>
-                <ul style="margin-left: 20px; font-size: 0.95rem;">
-                    <li>ผศ.มูหำหมัด สาแลบิง</li>
-                </ul>
+                <p>เว็บไซต์นี้ออกแบบมาเพื่อนิสิตใช้ฝึกทักษะทั้ง 6 ด้าน: บทสนทนา, คำศัพท์, เติมคำ, เรียงลำดับ, คำถาม และบทบาทสมมติ</p>
+                <div class="culture-box"><strong>อาจารย์ผู้รับผิดชอบ:</strong> อ.ดร.กูชม ยามิรูเต็ง, ผศ.มูฮัมหมัด สาแลบิง, ผศ.ดร.กามารุดดีน อิสายะ และ อ.ซัมซียะห์ มะลาเฮง</div>
             </div>
         </div>
 
-        <!-- บทที่ 1 -->
-        <div id="ch1" class="section-content">
-            <div class="card">
-                <h2>บทที่ 1: ความรู้ทั่วไปเกี่ยวกับภาษาและชนชาติมลายู</h2>
-                <p>ศึกษาประวัติความเป็นมา ความหมายของคำว่า "มลายู" และบริบทสังคมพหุวัฒนธรรม</p>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Bangsa Melayu</div><div class="th">ชนชาติมลายู</div></div>
-                        <button class="audio-btn" onclick="speak('Bangsa Melayu')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Masyarakat</div><div class="th">สังคม / ชุมชน</div></div>
-                        <button class="audio-btn" onclick="speak('Masyarakat')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 2 -->
-        <div id="ch2" class="section-content">
-            <div class="card">
-                <h2>บทที่ 2: ระบบและการสะกดคำภาษามลายู</h2>
-                <p>เรียนรู้ระบบเสียงสระ (Vokal) และพยัญชนะ (Konsonan) เบื้องต้น</p>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Buku</div><div class="th">หนังสือ</div></div>
-                        <button class="audio-btn" onclick="speak('Buku')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Rumah</div><div class="th">บ้าน</div></div>
-                        <button class="audio-btn" onclick="speak('Rumah')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 3 -->
+        <!-- ตัวอย่างโครงสร้างบทเรียน (บทที่ 3: การทักทาย) -->
         <div id="ch3" class="section-content">
             <div class="card">
                 <h2>บทที่ 3: การกล่าวทักทาย (Ucap Selamat)</h2>
-                <div class="vocab-grid">
+                
+                <!-- 1. บทสนทนา -->
+                <div class="section-box">
+                    <h3>1. บทสนทนา (Perbualan)</h3>
+                    <div class="dialogue-item">
+                        <div class="vocab-info"><div class="ms">A: Selamat pagi, apa khabar?</div><div class="th">A: สวัสดีตอนเช้า สบายดีไหม?</div></div>
+                        <button class="audio-btn" onclick="speak('Selamat pagi, apa khabar?')">🔊</button>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="vocab-info"><div class="ms">B: Khabar baik, terima kasih.</div><div class="th">B: สบายดี ขอบคุณครับ/ค่ะ</div></div>
+                        <button class="audio-btn" onclick="speak('Khabar baik, terima kasih.')">🔊</button>
+                    </div>
+                </div>
+
+                <!-- 2. คำศัพท์ -->
+                <div class="section-box">
+                    <h3>2. คำศัพท์ (Kosa Kata)</h3>
                     <div class="vocab-item">
                         <div class="vocab-info"><div class="ms">Selamat pagi</div><div class="th">สวัสดีตอนเช้า</div></div>
                         <button class="audio-btn" onclick="speak('Selamat pagi')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Apa khabar?</div><div class="th">สบายดีไหม?</div></div>
-                        <button class="audio-btn" onclick="speak('Apa khabar?')">🔊</button>
                     </div>
                     <div class="vocab-item">
                         <div class="vocab-info"><div class="ms">Terima kasih</div><div class="th">ขอบคุณ</div></div>
                         <button class="audio-btn" onclick="speak('Terima kasih')">🔊</button>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- บทที่ 4 -->
-        <div id="ch4" class="section-content">
-            <div class="card">
-                <h2>บทที่ 4: การสนทนาทำความรู้จักกัน (Berkenalan)</h2>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Nama saya...</div><div class="th">ฉันชื่อ...</div></div>
-                        <button class="audio-btn" onclick="speak('Nama saya')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Awak berasal dari mana?</div><div class="th">คุณมาจากไหน?</div></div>
-                        <button class="audio-btn" onclick="speak('Awak berasal dari mana?')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 5 -->
-        <div id="ch5" class="section-content">
-            <div class="card">
-                <h2>บทที่ 5: มหาวิทยาลัยของฉัน (Universiti saya)</h2>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Universiti Thaksin</div><div class="th">มหาวิทยาลัยทักษิณ</div></div>
-                        <button class="audio-btn" onclick="speak('Universiti Thaksin')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Perpustakaan</div><div class="th">ห้องสมุด</div></div>
-                        <button class="audio-btn" onclick="speak('Perpustakaan')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 6 -->
-        <div id="ch6" class="section-content">
-            <div class="card">
-                <h2>บทที่ 6: จำนวนนับ (Nombor)</h2>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Satu (1) / Dua (2) / Tiga (3)</div><div class="th">หนึ่ง / สอง / สาม</div></div>
-                        <button class="audio-btn" onclick="speak('Satu, Dua, Tiga')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Sepuluh (10)</div><div class="th">สิบ</div></div>
-                        <button class="audio-btn" onclick="speak('Sepuluh')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 7 -->
-        <div id="ch7" class="section-content">
-            <div class="card">
-                <h2>บทที่ 7: การบอกวัน เดือน และปี (Hari Bulan)</h2>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Hari Isnin</div><div class="th">วันจันทร์</div></div>
-                        <button class="audio-btn" onclick="speak('Hari Isnin')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Hari Selasa</div><div class="th">วันอังคาร</div></div>
-                        <button class="audio-btn" onclick="speak('Hari Selasa')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 8 -->
-        <div id="ch8" class="section-content">
-            <div class="card">
-                <h2>บทที่ 8: นาฬิกาและเวลา (Jam dan waktu)</h2>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Pukul berapa sekarang?</div><div class="th">ตอนนี้กี่โมงแล้ว?</div></div>
-                        <button class="audio-btn" onclick="speak('Pukul berapa sekarang?')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 9 -->
-        <div id="ch9" class="section-content">
-            <div class="card">
-                <h2>บทที่ 9: ครอบครัวของฉัน (Keluarga Kami)</h2>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Ayah / Ibu</div><div class="th">พ่อ / แม่</div></div>
-                        <button class="audio-btn" onclick="speak('Ayah dan Ibu')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Berapa umur awak?</div><div class="th">คุณอายุเท่าไหร่?</div></div>
-                        <button class="audio-btn" onclick="speak('Berapa umur awak?')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 10 -->
-        <div id="ch10" class="section-content">
-            <div class="card">
-                <h2>บทที่ 10: ผลไม้ (Buah-buahan)</h2>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Durian / Rambutan</div><div class="th">ทุเรียน / เงาะ</div></div>
-                        <button class="audio-btn" onclick="speak('Durian dan Rambutan')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 11 -->
-        <div id="ch11" class="section-content">
-            <div class="card">
-                <h2>บทที่ 11: ภัตตาคาร (Di restoran)</h2>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Nasi goreng</div><div class="th">ข้าวผัด</div></div>
-                        <button class="audio-btn" onclick="speak('Nasi goreng')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Teh tarik</div><div class="th">ชาชัก</div></div>
-                        <button class="audio-btn" onclick="speak('Teh tarik')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- บทที่ 12 -->
-        <div id="ch12" class="section-content">
-            <div class="card">
-                <h2>บทที่ 12: ซุปเปอร์มาเก็ต (Ke pasar raya)</h2>
-                <div class="vocab-grid">
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Berapa harga?</div><div class="th">ราคาเท่าไหร่?</div></div>
-                        <button class="audio-btn" onclick="speak('Berapa harga?')">🔊</button>
-                    </div>
-                    <div class="vocab-item">
-                        <div class="vocab-info"><div class="ms">Mahal / Murah</div><div class="th">แพง / ถูก</div></div>
-                        <button class="audio-btn" onclick="speak('Mahal dan Murah')">🔊</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- แบบทดสอบ -->
-        <div id="quiz" class="section-content">
-            <div class="card">
-                <h2>แบบทดสอบความรู้</h2>
-                <div class="quiz-container">
-                    <div class="question">1. คำว่า "Selamat pagi" แปลว่าอะไร?</div>
+                <!-- 3. เติมคำ -->
+                <div class="section-box">
+                    <h3>3. เติมคำในช่องว่าง (Latihan Mengisi Tempat Kosong)</h3>
+                    <p>A: ......... pagi! (สวัสดีตอนเช้า)</p>
                     <div class="options">
-                        <button class="option-btn" onclick="checkAnswer(this, false)">สวัสดีตอนเย็น</button>
-                        <button class="option-btn" onclick="checkAnswer(this, true)">สวัสดีตอนเช้า</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true)">Selamat</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">Jumpa</button>
                     </div>
+                </div>
 
-                    <div class="question">2. ข้อใดแปลว่า "ขอบคุณ"?</div>
+                <!-- 4. เรียงลำดับ -->
+                <div class="section-box">
+                    <h3>4. เรียงประโยค (Susunan Ayat)</h3>
+                    <p>จงเรียงคำว่า: [ khabar / Apa / ? ] ให้ถูกต้อง</p>
                     <div class="options">
-                        <button class="option-btn" onclick="checkAnswer(this, true)">Terima kasih</button>
-                        <button class="option-btn" onclick="checkAnswer(this, false)">Apa khabar</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true)">Apa khabar?</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">Khabar apa?</button>
                     </div>
+                </div>
 
-                    <div class="question">3. ตัวเลข "Tiga" คือจำนวนใด?</div>
+                <!-- 5. คำถาม -->
+                <div class="section-box">
+                    <h3>5. คำถามท้ายบท (Soalan)</h3>
+                    <p>เมื่อมีคนกล่าว "Terima kasih" เราควรตอบกลับว่าอย่างไร?</p>
                     <div class="options">
-                        <button class="option-btn" onclick="checkAnswer(this, false)">2</button>
-                        <button class="option-btn" onclick="checkAnswer(this, true)">3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">Selamat tinggal</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true)">Sama-sama (ด้วยความยินดี)</button>
+                    </div>
+                </div>
+
+                <!-- 6. บทบาทสมมติและเกร็ดวัฒนธรรม -->
+                <div class="section-box">
+                    <h3>6. บทบาทสมมติ (Role Play)</h3>
+                    <p><strong>สถานการณ์:</strong> นักศึกษาเดินพบอาจารย์ในช่วงเช้า ให้จับคู่ฝึกทักทายและกล่าวขอบคุณเป็นภาษามลายู</p>
+                    <div class="culture-box">
+                        <strong>เกร็ดวัฒนธรรม (Budaya):</strong> การทักทายในสังคมมลายูมักมาพร้อมกับการยิ้มแย้ม และหากเป็นผู้สูงอายุอาจใช้การสัมผัสมือเบา ๆ (Bersalaman) ตามหลักวัฒนธรรมท้องถิ่น
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- บทที่ 4 - 12 (โครงสร้างมาตรฐานที่พร้อมให้นิสิตใช้งาน) -->
+        <div id="ch4" class="section-content"><div class="card"><h2>บทที่ 4: การสนทนาทำความรู้จักกัน (Berkenalan)</h2><p>เนื้อหาบทสนทนา คำศัพท์ แบบฝึกหัดเติมคำ เรียงประโยค คำถาม และบทบาทสมมติกำลังแสดงผล...</p></div></div>
+        <div id="ch5" class="section-content"><div class="card"><h2>บทที่ 5: มหาวิทยาลัยของฉัน (Universiti saya)</h2><p>เนื้อหาบทสนทนา คำศัพท์ แบบฝึกหัดเติมคำ เรียงประโยค คำถาม และบทบาทสมมติกำลังแสดงผล...</p></div></div>
+        <div id="ch6" class="section-content"><div class="card"><h2>บทที่ 6: จำนวนนับ (Nombor)</h2><p>เนื้อหาบทสนทนา คำศัพท์ แบบฝึกหัดเติมคำ เรียงประโยค คำถาม และบทบาทสมมติกำลังแสดงผล...</p></div></div>
+        <div id="ch7" class="section-content"><div class="card"><h2>บทที่ 7: การบอกวัน เดือน และปี (Hari Bulan)</h2><p>เนื้อหาบทสนทนา คำศัพท์ แบบฝึกหัดเติมคำ เรียงประโยค คำถาม และบทบาทสมมติกำลังแสดงผล...</p></div></div>
+        <div id="ch8" class="section-content"><div class="card"><h2>บทที่ 8: นาฬิกาและเวลา (Jam dan waktu)</h2><p>เนื้อหาบทสนทนา คำศัพท์ แบบฝึกหัดเติมคำ เรียงประโยค คำถาม และบทบาทสมมติกำลังแสดงผล...</p></div></div>
+        <div id="ch9" class="section-content"><div class="card"><h2>บทที่ 9: ครอบครัวของฉัน (Keluarga Kami)</h2><p>เนื้อหาบทสนทนา คำศัพท์ แบบฝึกหัดเติมคำ เรียงประโยค คำถาม และบทบาทสมมติกำลังแสดงผล...</p></div></div>
+        <div id="ch10" class="section-content"><div class="card"><h2>บทที่ 10: ผลไม้ (Buah-buahan)</h2><p>เนื้อหาบทสนทนา คำศัพท์ แบบฝึกหัดเติมคำ เรียงประโยค คำถาม และบทบาทสมมติกำลังแสดงผล...</p></div></div>
+        <div id="ch11" class="section-content"><div class="card"><h2>บทที่ 11: ภัตตาคาร (Di restoran)</h2><p>เนื้อหาบทสนทนา คำศัพท์ แบบฝึกหัดเติมคำ เรียงประโยค คำถาม และบทบาทสมมติกำลังแสดงผล...</p></div></div>
+        <div id="ch12" class="section-content"><div class="card"><h2>บทที่ 12: ซุปเปอร์มาเก็ต (Ke pasar raya)</h2><p>เนื้อหาบทสนทนา คำศัพท์ แบบฝึกหัดเติมคำ เรียงประโยค คำถาม และบทบาทสมมติกำลังแสดงผล...</p></div></div>
 
     </div>
 
