@@ -97,7 +97,7 @@
           <h1>${C.code} ${C.th}<br><span class="ms" lang="ms" style="font-weight:500;opacity:.8">${C.en}</span></h1>
           <p>บทเรียนออนไลน์ประกอบการเรียนในชั้น ${C.term} ฟังเสียง ทบทวนคำศัพท์ และทำแบบฝึกหัดได้ทุกที่</p>
           <div class="btn-row">
-            <a class="btn btn-gold" href="${lessonLink(next.no)}">${doneCount ? "เรียนต่อ บทที่ " + next.no : "เริ่มบทที่ 1"}</a>
+            <a class="btn btn-hero" href="${lessonLink(next.no)}">${doneCount ? "เรียนต่อ บทที่ " + next.no : "เริ่มบทที่ 1"}</a>
             <a class="btn btn-ghost" href="#/kursus">ดูข้อมูลรายวิชา</a>
           </div>
         </div>
@@ -124,11 +124,10 @@
       const now = new Date(), h = now.getHours(), m = now.getMinutes();
       const greet = greetFor(h);
       g.innerHTML = esc(greet) + '<span class="dot">.</span>';
-      $("#greet-read").innerHTML = `ตอนนี้ <b>${String(h).padStart(2, "0")}.${String(m).padStart(2, "0")} น.</b> ชาวมลายูทักทายกันว่า <b lang="ms">${greet}</b> ${sayBtn(greet)}`;
-      $("#greet-clock").innerHTML = `<span lang="ms" class="ms">${timeVariants(h, m)[0]}</span> · เรียนวิธีบอกเวลาได้ใน <a href="${lessonLink(8)}" style="color:#E0B44C">บทที่ 8</a>`;
+      $("#greet-read").innerHTML = `ตอนนี้ <b>${String(h).padStart(2, "0")}.${String(m).padStart(2, "0")} น.</b> ชาวมลายูทักทายกันว่า <b lang="ms">${greet}</b> ${sayBtn(greet).replace('class="say"', 'class="say hero-say"')}`;
+      $("#greet-clock").innerHTML = `<span lang="ms" class="ms">${timeVariants(h, m)[0]}</span> · เรียนวิธีบอกเวลาได้ใน <a class="on-band" href="${lessonLink(8)}">บทที่ 8</a>`;
     };
     tick(); clearInterval(home.iv); home.iv = setInterval(tick, 30000);
-    $(".hero .say") && $(".hero .say").setAttribute("style", "vertical-align:middle;margin-left:4px;background:transparent;color:#E0B44C;border-color:#3E6A54");
   }
 
   /* ================= LESSON ================= */
@@ -374,11 +373,68 @@
 
   function notFound() { app.innerHTML = `<section class="section"><div class="wrap"><h2>ไม่พบหน้านี้</h2><p>ลิงก์อาจพิมพ์ผิด กลับไปที่ <a href="#/">แผนการเรียน</a> เพื่อเลือกบทเรียน</p></div></section>`; }
 
+  /* ---------- ปุ่มนำทางด้านล่าง (ทุกหน้า) ---------- */
+  const ICON = {
+    home: '<path d="M3 11 12 3l9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
+    prev: '<path d="M15 5 8 12l7 7"/>',
+    next: '<path d="M9 5l7 7-7 7"/>',
+    book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 8h6"/>',
+    top: '<path d="M12 19V6"/><path d="M6 11l6-6 6 6"/>'
+  };
+  const ico = k => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
+  /* ลำดับหน้าสำหรับปุ่ม ก่อนหน้า/ถัดไป */
+  const SEQ = [{ key: "home", href: "#/", name: "แผนการเรียน" }]
+    .concat(L.map(l => ({ key: "bab" + l.no, href: lessonLink(l.no), name: "บทที่ " + l.no })))
+    .concat([{ key: "kamus", href: "#/kamus", name: "คลังคำศัพท์" }, { key: "alat", href: "#/alat", name: "เครื่องมือฝึก" }, { key: "kursus", href: "#/kursus", name: "ข้อมูลรายวิชา" }]);
+  function pageNav(key) {
+    const nav = $("#pagenav"); const i = SEQ.findIndex(x => x.key === key);
+    const prev = i > 0 ? SEQ[i - 1] : null, next = i >= 0 && i < SEQ.length - 1 ? SEQ[i + 1] : null;
+    const cur = k => key === k ? ' aria-current="page"' : "";
+    nav.innerHTML = `
+      <a href="#/"${cur("home")}>${ico("home")}หน้าแรก</a>
+      <span class="sep" aria-hidden="true"></span>
+      ${prev ? `<a class="pn-wide" href="${prev.href}" aria-label="ก่อนหน้า: ${prev.name}">${ico("prev")}<span><small>ก่อนหน้า</small>${prev.name}</span></a>`
+             : `<span class="pn-wide is-off" aria-hidden="true">${ico("prev")}<span><small>ก่อนหน้า</small>—</span></span>`}
+      ${next ? `<a class="pn-wide next" href="${next.href}" aria-label="ถัดไป: ${next.name}"><span><small>ถัดไป</small>${next.name}</span>${ico("next")}</a>`
+             : `<span class="pn-wide next is-off" aria-hidden="true"><span><small>ถัดไป</small>—</span>${ico("next")}</span>`}
+      <span class="sep" aria-hidden="true"></span>
+      <a href="#/kamus"${cur("kamus")}>${ico("book")}คำศัพท์</a>
+      <button type="button" data-top>${ico("top")}บนสุด</button>`;
+    $("[data-top]", nav).onclick = () => window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
+
+  /* ---------- หน้าปก (เปิด/ปิดได้) ---------- */
+  const cover = $("#cover");
+  $("#cover-term").textContent = C.term;  /* ภาคเรียนบนหน้าปก ดึงจาก course.js */
+  function openCover() {
+    document.documentElement.classList.remove("no-cover");
+    cover.classList.remove("closing"); cover.hidden = false;
+    $("#cover-skip").checked = load().cover === "off";
+    document.body.style.overflow = "hidden";
+    setTimeout(() => $("#cover-enter").focus(), 50);
+  }
+  function closeCover() {
+    const s = load(); s.cover = $("#cover-skip").checked ? "off" : "on"; save(s);
+    document.body.style.overflow = "";
+    const done = () => { cover.hidden = true; cover.classList.remove("closing"); };
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) done();
+    else { cover.classList.add("closing"); setTimeout(done, 340); }
+    app.focus({ preventScroll: true });
+  }
+  $("#cover-enter").addEventListener("click", closeCover);
+  $("#cover-open").addEventListener("click", openCover);
+  $("#cover-skip").addEventListener("change", e => { const s = load(); s.cover = e.target.checked ? "off" : "on"; save(s); toast(e.target.checked ? "จะไม่แสดงหน้าปกอีก เปิดได้จากปุ่ม “หน้าปก” มุมขวาบน" : "จะแสดงหน้าปกทุกครั้งที่เปิดเว็บ"); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !cover.hidden) closeCover(); });
+  if (document.documentElement.classList.contains("no-cover")) cover.hidden = true;
+  else { document.body.style.overflow = "hidden"; $("#cover-skip").checked = false; setTimeout(() => $("#cover-enter").focus(), 50); }
+
   /* ---------- router ---------- */
   function route() {
     if ("speechSynthesis" in window) speechSynthesis.cancel();
     clearInterval(home.iv);
     const p = location.hash.replace(/^#\/?/, "").split("/");
+    const n = parseInt(p[1], 10);
+    pageNav(!p[0] ? "home" : p[0] === "bab" ? "bab" + n : p[0]);
     if (!p[0]) home();
     else if (p[0] === "bab") lesson(parseInt(p[1], 10));
     else if (p[0] === "kamus") kamus();
