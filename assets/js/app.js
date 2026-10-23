@@ -480,10 +480,10 @@
   $("#cover-term").textContent = C.term;  /* ภาคเรียนบนหน้าปก ดึงจาก course.js */
   function openCover() {
     document.documentElement.classList.remove("no-cover");
-    cover.classList.remove("closing"); cover.hidden = false;
+    cover.classList.remove("closing"); cover.hidden = false; cover.scrollTop = 0;
     $("#cover-skip").checked = load().cover === "off";
     document.body.style.overflow = "hidden";
-    setTimeout(() => $("#cover-enter").focus(), 50);
+    setTimeout(() => $("#cover-enter").focus({ preventScroll: true }), 50);
   }
   function closeCover() {
     const s = load(); s.cover = $("#cover-skip").checked ? "off" : "on"; save(s);
@@ -500,7 +500,7 @@
   $("#cover-skip").addEventListener("change", e => { const s = load(); s.cover = e.target.checked ? "off" : "on"; save(s); toast(e.target.checked ? "จะไม่แสดงหน้าปกอีก เปิดได้จากปุ่ม “หน้าปก” มุมขวาบน" : "จะแสดงหน้าปกทุกครั้งที่เปิดเว็บ"); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !cover.hidden) closeCover(); });
   if (document.documentElement.classList.contains("no-cover")) cover.hidden = true;
-  else { document.body.style.overflow = "hidden"; $("#cover-skip").checked = false; setTimeout(() => $("#cover-enter").focus(), 50); }
+  else { document.body.style.overflow = "hidden"; $("#cover-skip").checked = false; setTimeout(() => $("#cover-enter").focus({ preventScroll: true }), 50); }
 
   /* ---------- router ---------- */
   function route() {
