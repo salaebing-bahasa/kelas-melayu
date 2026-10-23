@@ -71,7 +71,7 @@ a { color: var(--biru); text-underline-offset: 3px; }
 .mainnav a[aria-current="page"] { background: rgba(255,255,255,.14); box-shadow: inset 0 -2px 0 var(--langit); }
 .icon-btn { background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; flex: none; }
 .menu-btn { display: none; }
-@media (max-width: 760px) {
+@media (max-width: 960px) {
   .menu-btn { display: grid; }
   .mainnav { display: none; position: absolute; top: 58px; left: 0; right: 0; background: var(--band); flex-direction: column; padding: 8px 16px 14px; }
   .mainnav.open { display: flex; }
@@ -355,41 +355,146 @@ body { padding-bottom: 76px; }
 }
 @media print { .pagenav, #cover { display: none !important; } body { padding-bottom: 0; } }
 
-/* ---------- cover page (หน้าปก) ---------- */
+/* ---------- ปกนอก (cover) ---------- */
 #cover {
   position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column;
-  background: var(--band-deep); color: var(--band-text); overflow-y: auto;
+  background: var(--band-deep); color: var(--band-text); overflow-y: auto; overflow-x: hidden;
 }
 html.no-cover #cover, #cover[hidden] { display: none; }
-.cover-pattern { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-#cover .rebung { position: relative; flex: none; height: 26px; background-size: 33px 26px; }
-#cover .rebung.down { transform: scaleY(-1); }
-.cover-stage { position: relative; flex: 1; display: grid; place-items: center; padding: 28px 16px; }
-.cover-frame {
-  position: relative; width: min(680px, 100%); text-align: center;
-  background: rgba(7, 29, 56, .86); padding: 46px 34px 34px;
-  border: 1.5px solid rgba(255, 255, 255, .85); outline: 1px solid var(--langit); outline-offset: 7px;
+.cover-pattern { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+/* แถบหน่อไม้ขนาดใหญ่ บน–ล่าง */
+.cv-band { position: relative; flex: none; height: 104px; }
+.cv-band__svg { display: block; width: 100%; max-width: none; height: 104px; }
+.cv-band--top .cv-band__svg { transform: scaleY(-1); }
+
+.cv-main {
+  position: relative; flex: 1; width: 100%; max-width: 1180px; margin: 0 auto;
+  display: grid; place-items: center; padding: 24px 24px;
 }
-.cover-frame .corner { position: absolute; width: 26px; height: 26px; }
-.cover-frame .c1 { top: -14px; left: -14px; } .cover-frame .c2 { top: -14px; right: -14px; }
-.cover-frame .c3 { bottom: -14px; left: -14px; } .cover-frame .c4 { bottom: -14px; right: -14px; }
-.cover-bunga { width: 74px; height: 74px; margin: 0 auto 14px; display: block; }
-.cover-code { margin: 0; font-size: 15px; letter-spacing: .06em; color: var(--langit); font-weight: 600; }
-.cover-ms { font-family: var(--ms-font); font-weight: 500; font-size: clamp(30px, 6vw, 50px); line-height: 1.1; margin: 8px 0 10px; color: #FFFFFF; }
-.cover-th { font-size: clamp(21px, 3.6vw, 28px); font-weight: 700; margin: 0 0 4px; color: #FFFFFF; }
-.cover-en { font-family: var(--ms-font); font-style: italic; font-size: 17px; color: var(--band-soft); margin: 0; }
-.cover-rule { width: 140px; height: 14px; margin: 20px auto; display: block; }
-.cover-org { margin: 0; font-size: 15.5px; color: var(--band-soft); line-height: 1.6; }
-.cover-actions { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.cover-enter { background: #FFFFFF; color: var(--band); min-height: 50px; padding: 0 30px; font-size: 17px; }
+.cv-text { max-width: 820px; text-align: center; }
+.cv-code { margin: 0 0 4px; font-size: 16px; font-weight: 600; color: var(--langit); letter-spacing: .04em; }
+.cv-rumi { margin: 0; font-family: var(--ms-font); color: #FFFFFF; }
+.cv-rumi-1 { display: block; font-weight: 600; font-size: clamp(46px, 7.5vw, 112px); line-height: 1.02; letter-spacing: -.01em; white-space: nowrap; }
+.cv-rumi-2 { display: block; margin-top: 8px; font-style: italic; font-weight: 500; font-size: clamp(22px, 2.3vw, 32px); line-height: 1.25; color: var(--langit); }
+.cv-rule { display: block; width: 220px; height: 14px; margin: 22px auto; }
+.cv-th { margin: 0; white-space: nowrap; font-size: clamp(28px, 3.3vw, 42px); line-height: 1.25; font-weight: 700; color: #FFFFFF; }
+.cv-en { margin: 4px 0 0; font-size: 18px; color: var(--band-soft); }
+.cv-org { margin: 18px 0 0; font-size: 15.5px; line-height: 1.65; color: var(--band-muted); }
+.cover-actions { margin-top: 28px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; }
+.cover-enter { background: #FFFFFF; color: var(--band); min-height: 52px; padding: 0 30px; font-size: 17.5px; box-shadow: 0 6px 18px rgba(3, 12, 26, .35); }
 .cover-enter:hover { background: var(--band-soft); }
-.cover-skip { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; color: var(--band-soft); cursor: pointer; }
+.cover-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.cover-links a { color: #FFFFFF; text-decoration: none; border: 1px solid var(--band-line); border-radius: 999px; padding: 8px 16px; font-size: 15px; background: rgba(7, 29, 56, .4); }
+.cover-links a:hover { border-color: var(--langit); background: rgba(255, 255, 255, .06); }
+.cover-skip { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; font-size: 14.5px; color: var(--band-soft); cursor: pointer; }
 .cover-skip input { width: 18px; height: 18px; accent-color: var(--langit); }
-#cover:not([hidden]) .cover-frame { animation: coverIn .7s cubic-bezier(.2, .7, .2, 1) both; }
+
+/* ช่วงเปิดปก: ว่าวลอยขึ้นมาหนึ่งครั้ง ข้อความค่อย ๆ ปรากฏ */
+#cover:not([hidden]) .cv-text { animation: coverIn .8s .15s cubic-bezier(.2, .7, .2, 1) both; }
 #cover.closing { animation: coverOut .35s ease forwards; }
-@keyframes coverIn { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes coverIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes coverOut { to { opacity: 0; visibility: hidden; } }
-@media (prefers-reduced-motion: reduce) { #cover:not([hidden]) .cover-frame, #cover.closing { animation: none; } }
-@media (max-width: 560px) { .cover-frame { padding: 36px 20px 26px; } }
+@media (prefers-reduced-motion: reduce) { #cover:not([hidden]) .cv-text, #cover.closing { animation: none; } }
+
+@media (max-width: 860px) {
+  .cv-band { height: 73px; overflow: hidden; }
+  .cv-band__svg { width: 143%; height: 104px; transform-origin: 0 0; transform: scale(.7); }
+  .cv-band--top .cv-band__svg { transform: translateY(73px) scale(.7, -.7); }
+  .cv-main { padding: 18px 20px; }
+  .cv-th { font-size: min(7.2vw, 34px); }
+  .cv-rumi-1 { font-size: min(13.5vw, 64px); }
+  .cv-rumi-2 { font-size: 20px; }
+  .cv-org { font-size: 14.5px; }
+  .cv-rule { margin: 14px auto; }
+  .cover-links { justify-content: center; }
+}
 .cover-btn { width: auto; padding: 0 12px; border-radius: 999px; gap: 6px; display: inline-flex; align-items: center; font: 500 14px var(--th-font); }
 @media (max-width: 760px) { .cover-btn span { display: none; } .cover-btn { width: 38px; padding: 0; justify-content: center; } }
+
+/* ---------- ปกใน (title page) ---------- */
+.sheet-wrap { padding: 36px 16px 20px; }
+.sheet {
+  position: relative; max-width: 640px; min-height: 860px; margin: 0 auto; background: var(--surface);
+  border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(11, 42, 78, .08);
+  padding: 34px; display: flex;
+}
+.sheet-inner {
+  flex: 1; border: 1.5px solid var(--biru); outline: 1px solid var(--biru); outline-offset: -7px;
+  padding: 56px 30px 40px; display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.sheet .emblem { width: 70px; height: 70px; margin-bottom: 26px; }
+.emblem .pt { fill: var(--surface); stroke: var(--biru); stroke-width: 1.4; }
+.emblem .ring { fill: none; stroke: var(--line); stroke-width: 1.2; }
+.emblem .dt { fill: var(--aksen); }
+.emblem .ct { fill: var(--biru); }
+.sheet .doc { font-size: 17px; color: var(--muted); margin: 0; }
+.sheet .code { font-size: 18px; font-weight: 600; margin: 4px 0 6px; color: var(--aksen); }
+.sheet .t-th { font-size: clamp(26px, 5vw, 36px); font-weight: 700; line-height: 1.3; margin: 0; color: var(--dakwat); }
+.sheet .t-en { font-size: 18px; margin: 6px 0 0; color: var(--muted); }
+.sheet .t-ms { font-family: var(--ms-font); font-style: italic; font-size: 20px; margin: 2px 0 0; color: var(--biru); }
+.sheet .rule { width: 120px; height: 12px; margin: 30px auto; }
+.rule .ln { stroke: var(--aksen); } .rule .dm { fill: var(--biru); }
+.sheet .by { font-size: 16px; color: var(--muted); margin: 0 0 6px; }
+.sheet .author { font-size: 21px; font-weight: 600; margin: 0; }
+.sheet .degree { font-size: 17px; margin: 2px 0 0; color: var(--muted); }
+.sheet .org { margin-top: auto; padding-top: 40px; font-size: 17px; line-height: 1.7; }
+.sheet .org b { font-weight: 600; }
+.sheet-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 24px 0 8px; }
+.sheet .nw { white-space: nowrap; }
+@media (max-width: 560px) {
+  .sheet .t-th { font-size: 23px; }
+  .sheet .author { font-size: 18.5px; }
+  .sheet .t-ms { font-size: 18px; }
+  .sheet { padding: 14px; min-height: 0; }
+  .sheet-inner { padding: 36px 16px 28px; }
+}
+
+/* ---------- สารบัญ (table of contents) ---------- */
+.toc-page { max-width: 860px; }
+.toc-head { text-align: center; margin-bottom: 28px; }
+.toc-head h1 { font-size: 34px; margin: 0; }
+.toc-head p { margin: 0; font-family: var(--ms-font); font-style: italic; color: var(--muted); font-size: 18px; }
+.toc-part { margin: 0 0 30px; }
+.toc-part > h2 { font-size: 15px; font-weight: 600; color: var(--aksen); margin: 0 0 6px; padding-bottom: 6px; border-bottom: 2px solid var(--biru); }
+.toc-list { list-style: none; margin: 0; padding: 0; }
+.toc-list > li { border-bottom: 1px solid var(--line); }
+.toc-row { display: flex; align-items: baseline; gap: 12px; padding: 12px 6px; text-decoration: none; color: inherit; border-radius: var(--radius-s); background: none; border: 0; width: 100%; font: inherit; text-align: left; cursor: pointer; }
+.toc-row:hover { background: var(--biru-muda); }
+.toc-no { flex: none; width: 66px; font-size: 15px; color: var(--muted); }
+.toc-title { flex: none; max-width: 70%; }
+.toc-title .ms { display: block; font-size: 20px; font-weight: 600; color: var(--biru); line-height: 1.3; }
+.toc-title .th { font-size: 16px; }
+.toc-title .solo { font-size: 17.5px; }
+.toc-dots { flex: 1; min-width: 20px; border-bottom: 2px dotted var(--line); transform: translateY(-5px); }
+.toc-pg { flex: none; font-size: 14.5px; color: var(--muted); white-space: nowrap; }
+.toc-pg.done { color: var(--ok); font-weight: 600; }
+.toc-subs { list-style: none; margin: -4px 0 12px 78px; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 6px; }
+.toc-subs a { font-size: 14px; color: var(--muted); text-decoration: none; padding: 2px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.toc-subs a:hover { color: var(--biru); border-color: var(--biru); }
+@media (max-width: 560px) {
+  .toc-no { width: 52px; font-size: 13.5px; }
+  .toc-title { max-width: none; flex: 1; }
+  .toc-dots { display: none; }
+  .toc-subs { margin-left: 0; }
+}
+
+
+/* print: ปกใน และ สารบัญ พิมพ์เป็นหน้าเอกสารได้ */
+@media print {
+  .topbar, footer, .rebung, .pagenav, .sheet-actions, .toc-subs { display: none !important; }
+  body { background: #fff; }
+  .sheet { box-shadow: none; border: 0; min-height: 26cm; }
+  .sheet-wrap { padding: 0; }
+}
+@media (max-width: 360px) {
+  .sheet .t-th { font-size: 20px; }
+  .sheet .author { font-size: 16.5px; }
+  .sheet-inner { padding-left: 10px; padding-right: 10px; }
+}
+
+@media (min-width: 861px) and (max-height: 860px) {
+  .cv-band { height: 76px; overflow: hidden; }
+  .cv-band__svg { width: 137%; transform-origin: 0 0; transform: scale(.73); }
+  .cv-band--top .cv-band__svg { transform: translateY(76px) scale(.73, -.73); }
+}

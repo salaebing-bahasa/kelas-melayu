@@ -7,6 +7,13 @@ window.COURSE = {
   credits: "3 (3-0-6)",
   term: "ภาคเรียนที่ 2 ปีการศึกษา 2569",
   program: "สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยทักษิณ",
+  /* ข้อมูลสำหรับหน้าปกใน — แก้ชื่อผู้เรียบเรียง วุฒิ หรือปีได้ที่นี่ */
+  ms: "Bahasa Melayu dalam Kehidupan Seharian",
+  docType: "บทเรียนออนไลน์ประกอบการสอน",
+  author: "ผู้ช่วยศาสตราจารย์มูหำหมัด สาแลบิง",
+  authorDegree: "กศ.ม. (ภาษามลายู)",
+  faculty: "สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์",
+  university: "มหาวิทยาลัยทักษิณ วิทยาเขตสงขลา",
   goal: "เพื่อให้ผู้เรียนมีทักษะการใช้ภาษามลายูเพื่อการสื่อสารในชีวิตประจำวันได้",
   descTh: "ระบบเสียง การสะกดคำ คำศัพท์ และระบบไวยากรณ์ภาษามลายูเบื้องต้นที่ใช้ในชีวิตประจำวัน โดยฝึกการฟัง การพูด การอ่าน และการเขียนในบริบทสังคมวัฒนธรรมมลายู",
   descEn: "Basic Malay phonological system, spelling system, vocabulary for daily communication, and grammatical system; Malay listening, speaking, reading, and writing practice in Malay socio-cultural contexts",
