@@ -5,20 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>0001154 ภาษามลายูในชีวิตประจำวัน | มหาวิทยาลัยทักษิณ</title>
   <meta name="description" content="บทเรียนออนไลน์รายวิชา 0001154 ภาษามลายูในชีวิตประจำวัน (Malay Language in Daily Life) สาขาวิชาภาษามลายู มหาวิทยาลัยทักษิณ — บทสนทนาพร้อมเสียง คำศัพท์ หลักภาษา และแบบฝึกหัด">
-  <meta name="theme-color" content="#143D2A">
+  <meta name="theme-color" content="#0B2A4E">
   <meta property="og:title" content="0001154 ภาษามลายูในชีวิตประจำวัน">
   <meta property="og:description" content="บทเรียน 12 บท พร้อมเสียง คำศัพท์ และแบบฝึกหัด — สาขาวิชาภาษามลายู มหาวิทยาลัยทักษิณ">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23143D2A'/%3E%3Cpath d='M4 26 16 6l12 20z' fill='%23B8860B'/%3E%3Cpath d='M10 26l6-10 6 10z' fill='%23143D2A'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B2A4E'/%3E%3Cpath d='M4 26 16 6l12 20z' fill='%23FFFFFF'/%3E%3Cpath d='M10 26l6-10 6 10z' fill='%230B2A4E'/%3E%3Cpath d='M14 26l2-3 2 3z' fill='%239CC8F5'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=Spectral:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&family=Spectral:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    /* ซ่อนหน้าปกทันทีถ้าผู้ใช้เคยเลือก "ไม่ต้องแสดงอีก" หรือเปิดลิงก์ตรงเข้าบทเรียน */
+    try {
+      var s = JSON.parse(localStorage.getItem("bm0001154")) || {};
+      if (s.cover === "off" || /^#\/./.test(location.hash)) document.documentElement.classList.add("no-cover");
+    } catch (e) { if (/^#\/./.test(location.hash)) document.documentElement.classList.add("no-cover"); }
+  </script>
+  <noscript><style>#cover { display: none; } body { padding-bottom: 0; }</style></noscript>
 </head>
 <body>
+
+  <!-- ================= หน้าปก (เปิด/ปิดได้) ================= -->
+  <div id="cover" role="dialog" aria-modal="true" aria-labelledby="cover-title">
+    <svg class="cover-pattern" aria-hidden="true" focusable="false">
+      <defs>
+        <!-- ลายบุหงาตาบูร (bunga tabur) แบบผ้าซองเก็ต ในตารางข้าวหลามตัด -->
+        <pattern id="songket" width="96" height="96" patternUnits="userSpaceOnUse">
+          <path d="M48 0 96 48 48 96 0 48Z" fill="none" stroke="#2E5584" stroke-width="1"/>
+          <path d="M48 22 74 48 48 74 22 48Z" fill="none" stroke="#1D4E89" stroke-width="1"/>
+          <g transform="translate(48 48)" fill="none" stroke="#9CC8F5" stroke-opacity=".6" stroke-width="1.2">
+            <ellipse cy="-9" rx="3.4" ry="7.5"/><ellipse cy="-9" rx="3.4" ry="7.5" transform="rotate(45)"/>
+            <ellipse cy="-9" rx="3.4" ry="7.5" transform="rotate(90)"/><ellipse cy="-9" rx="3.4" ry="7.5" transform="rotate(135)"/>
+            <ellipse cy="-9" rx="3.4" ry="7.5" transform="rotate(180)"/><ellipse cy="-9" rx="3.4" ry="7.5" transform="rotate(225)"/>
+            <ellipse cy="-9" rx="3.4" ry="7.5" transform="rotate(270)"/><ellipse cy="-9" rx="3.4" ry="7.5" transform="rotate(315)"/>
+          </g>
+          <circle cx="48" cy="48" r="2.8" fill="#FFFFFF" fill-opacity=".75"/>
+          <g fill="#9CC8F5" fill-opacity=".45">
+            <path d="M0 -5 5 0 0 5 -5 0Z"/><path d="M96 -5 101 0 96 5 91 0Z"/>
+            <path d="M0 91 5 96 0 101 -5 96Z"/><path d="M96 91 101 96 96 101 91 96Z"/>
+          </g>
+          <g fill="#FFFFFF" fill-opacity=".35">
+            <circle cx="48" cy="0" r="2"/><circle cx="48" cy="96" r="2"/><circle cx="0" cy="48" r="2"/><circle cx="96" cy="48" r="2"/>
+          </g>
+        </pattern>
+        <radialGradient id="cover-fade" cx="50%" cy="50%" r="65%">
+          <stop offset="35%" stop-color="#071D38" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#071D38" stop-opacity=".85"/>
+        </radialGradient>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#songket)"/>
+      <rect width="100%" height="100%" fill="url(#cover-fade)"/>
+    </svg>
+
+    <div class="rebung" role="presentation"></div>
+    <div class="cover-stage">
+      <div class="cover-frame">
+        <svg class="corner c1" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 1 25 13 13 25 1 13Z" fill="#0B2A4E" stroke="#FFFFFF" stroke-width="1.5"/><circle cx="13" cy="13" r="3.5" fill="#9CC8F5"/></svg>
+        <svg class="corner c2" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 1 25 13 13 25 1 13Z" fill="#0B2A4E" stroke="#FFFFFF" stroke-width="1.5"/><circle cx="13" cy="13" r="3.5" fill="#9CC8F5"/></svg>
+        <svg class="corner c3" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 1 25 13 13 25 1 13Z" fill="#0B2A4E" stroke="#FFFFFF" stroke-width="1.5"/><circle cx="13" cy="13" r="3.5" fill="#9CC8F5"/></svg>
+        <svg class="corner c4" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 1 25 13 13 25 1 13Z" fill="#0B2A4E" stroke="#FFFFFF" stroke-width="1.5"/><circle cx="13" cy="13" r="3.5" fill="#9CC8F5"/></svg>
+
+        <!-- ดอกไม้แปดกลีบ (bunga cengkih) -->
+        <svg class="cover-bunga" viewBox="-40 -40 80 80" aria-hidden="true">
+          <circle r="37" fill="none" stroke="#2E5584" stroke-width="1.2"/>
+          <g fill="#0B2A4E" stroke="#FFFFFF" stroke-width="1.4">
+            <path d="M0 -6C7 -14 7 -26 0 -33C-7 -26 -7 -14 0 -6Z"/>
+            <path d="M0 -6C7 -14 7 -26 0 -33C-7 -26 -7 -14 0 -6Z" transform="rotate(45)"/>
+            <path d="M0 -6C7 -14 7 -26 0 -33C-7 -26 -7 -14 0 -6Z" transform="rotate(90)"/>
+            <path d="M0 -6C7 -14 7 -26 0 -33C-7 -26 -7 -14 0 -6Z" transform="rotate(135)"/>
+            <path d="M0 -6C7 -14 7 -26 0 -33C-7 -26 -7 -14 0 -6Z" transform="rotate(180)"/>
+            <path d="M0 -6C7 -14 7 -26 0 -33C-7 -26 -7 -14 0 -6Z" transform="rotate(225)"/>
+            <path d="M0 -6C7 -14 7 -26 0 -33C-7 -26 -7 -14 0 -6Z" transform="rotate(270)"/>
+            <path d="M0 -6C7 -14 7 -26 0 -33C-7 -26 -7 -14 0 -6Z" transform="rotate(315)"/>
+          </g>
+          <g fill="#9CC8F5">
+            <circle cy="-20" r="2"/><circle cy="-20" r="2" transform="rotate(45)"/><circle cy="-20" r="2" transform="rotate(90)"/><circle cy="-20" r="2" transform="rotate(135)"/>
+            <circle cy="-20" r="2" transform="rotate(180)"/><circle cy="-20" r="2" transform="rotate(225)"/><circle cy="-20" r="2" transform="rotate(270)"/><circle cy="-20" r="2" transform="rotate(315)"/>
+          </g>
+          <circle r="5.5" fill="#FFFFFF"/>
+        </svg>
+
+        <p class="cover-code">รายวิชา 0001154</p>
+        <h1 class="cover-ms" id="cover-title" lang="ms">Bahasa Melayu dalam Kehidupan Seharian</h1>
+        <p class="cover-th">ภาษามลายูในชีวิตประจำวัน</p>
+        <p class="cover-en" lang="en">Malay Language in Daily Life</p>
+        <svg class="cover-rule" viewBox="0 0 140 14" aria-hidden="true"><path d="M0 7H56M84 7H140" stroke="#9CC8F5" stroke-width="1"/><path d="M70 1 76 7 70 13 64 7Z" fill="#FFFFFF"/><path d="M60 7 62 5 64 7 62 9Z M76 7 78 5 80 7 78 9Z" fill="#9CC8F5"/></svg>
+        <p class="cover-org">สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์<br>มหาวิทยาลัยทักษิณ วิทยาเขตสงขลา · <span id="cover-term">ภาคเรียนที่ 2 ปีการศึกษา 2569</span></p>
+
+        <div class="cover-actions">
+          <button type="button" class="btn cover-enter" id="cover-enter">เข้าสู่บทเรียน</button>
+          <label class="cover-skip"><input type="checkbox" id="cover-skip"> ไม่ต้องแสดงหน้าปกเมื่อเปิดเว็บครั้งต่อไป</label>
+        </div>
+      </div>
+    </div>
+    <div class="rebung down" role="presentation"></div>
+  </div>
+
+  <!-- ================= แถบหัวเว็บ ================= -->
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="#/">
-        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1F5D40"/><path d="M4 26 16 6l12 20z" fill="#B8860B"/><path d="M10 26l6-10 6 10z" fill="#1F5D40"/><path d="M14 26l2-3 2 3z" fill="#E0B44C"/></svg>
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1D4E89"/><path d="M4 26 16 6l12 20z" fill="#FFFFFF"/><path d="M10 26l6-10 6 10z" fill="#1D4E89"/><path d="M14 26l2-3 2 3z" fill="#9CC8F5"/></svg>
         <span class="brand-text"><b>0001154 ภาษามลายูในชีวิตประจำวัน</b><span>สาขาวิชาภาษามลายู มหาวิทยาลัยทักษิณ</span></span>
       </a>
       <nav class="mainnav" id="mainnav" aria-label="เมนูหลัก">
@@ -27,6 +113,9 @@
         <a href="#/alat" data-route="alat">เครื่องมือฝึก</a>
         <a href="#/kursus" data-route="kursus">ข้อมูลรายวิชา</a>
       </nav>
+      <button class="icon-btn cover-btn" type="button" id="cover-open" aria-label="เปิดหน้าปก">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 21 12 12 21 3 12Z"/><circle cx="12" cy="12" r="2.5"/></svg><span>หน้าปก</span>
+      </button>
       <button class="icon-btn theme-btn" type="button" aria-label="สลับโหมดสว่าง/มืด">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       </button>
@@ -47,6 +136,9 @@
       <p>ติดต่อ <a href="mailto:smuhammad@tsu.ac.th">smuhammad@tsu.ac.th</a></p>
     </div>
   </footer>
+
+  <!-- ปุ่มนำทางด้านล่าง (สร้างโดย app.js ทุกหน้า) -->
+  <nav class="pagenav" id="pagenav" aria-label="ปุ่มนำทาง"></nav>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="assets/js/course.js"></script>
