@@ -518,8 +518,20 @@
     else if (p[0] === "kandungan") kandungan();
     else notFound();
     app.focus({ preventScroll: true });
+    countView();
   }
   window.addEventListener("hashchange", route);
+
+  /* ---------- สถิติผู้เข้าชม (GoatCounter) ----------
+     นับทุกครั้งที่เปิดหน้า เช่น "/" = หน้าแรก, "/bab/3" = บทที่ 3, "/kamus" = พจนานุกรม */
+  function countView() {
+    try {
+      const path = "/" + location.hash.replace(/^#\/?/, "").split("/").slice(0, 2).filter(Boolean).join("/");
+      const send = () => { try { window.goatcounter.count({ path: path }); } catch (e) {} };
+      if (window.goatcounter && window.goatcounter.count) send();
+      else { const s = document.getElementById("gc-script"); if (s) s.addEventListener("load", send, { once: true }); }
+    } catch (e) {}
+  }
 
   /* ---------- chrome ---------- */
   $(".menu-btn").addEventListener("click", e => { const n = $(".mainnav"); const o = n.classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", o); });
