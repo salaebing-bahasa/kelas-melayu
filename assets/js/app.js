@@ -371,6 +371,77 @@
     window.scrollTo(0, 0);
   }
 
+  /* ================= ปกใน และ สารบัญ ================= */
+  const bunga = cls => `<svg class="${cls}" viewBox="-40 -40 80 80" aria-hidden="true"><circle class="ring" r="37"/>${
+    [0, 45, 90, 135, 180, 225, 270, 315].map(r => `<path class="pt" d="M0 -6C7 -14 7 -26 0 -33C-7 -26 -7 -14 0 -6Z" transform="rotate(${r})"/><circle class="dt" cy="-20" r="2" transform="rotate(${r})"/>`).join("")
+  }<circle class="ct" r="5.5"/></svg>`;
+  const ruleSVG = '<svg class="rule" viewBox="0 0 120 12" aria-hidden="true"><path class="ln" d="M0 6H48M72 6H120" stroke-width="1"/><path class="dm" d="M60 0 66 6 60 12 54 6Z"/></svg>';
+
+  /* ส่วนย่อยของแต่ละบท (ต้องตรงกับที่ lesson() สร้าง) */
+  function sections(l) {
+    const s = [["goals", "จุดประสงค์"]];
+    if (l.dialog) s.push(["perbualan", "บทสนทนา"]);
+    if (l.vocab) s.push(["kosakata", "คำศัพท์"]);
+    if (l.grammar) s.push(l.dialog ? ["tatabahasa", "หลักภาษา"] : ["isi", "เนื้อหา"]);
+    if (l.tool) s.push(["alat", "เครื่องมือฝึก"]);
+    if (l.idioms) s.push(["simpulan", "สำนวนภาษา"]);
+    if (l.culture) s.push(["budaya", "วัฒนธรรม"]);
+    if (l.exercises) s.push(["latihan", "แบบฝึกหัด"]);
+    return s;
+  }
+
+  /* ไม่ให้ตัดคำกลางชื่อ: แต่ละกลุ่มคำ (คั่นด้วยเว้นวรรค) อยู่บรรทัดเดียวกัน */
+  const nw = t => String(t).split(" ").map(w => `<span class="nw">${w}</span>`).join(" ");
+  function kulitDalam() {
+    setNav(""); document.title = `ปกใน | ${C.code} ${C.th}`;
+    app.innerHTML = `<section class="sheet-wrap"><article class="sheet" aria-label="ปกใน">
+      <div class="sheet-inner">
+        ${bunga("emblem")}
+        <p class="doc">${C.docType || "บทเรียนออนไลน์ประกอบการสอน"}</p>
+        <p class="code">รายวิชา ${C.code}</p>
+        <h1 class="t-th">${nw(C.th)}</h1>
+        <p class="t-en" lang="en">${C.en}</p>
+        <p class="t-ms" lang="ms">${C.ms || ""}</p>
+        ${ruleSVG}
+        <p class="by">เรียบเรียงโดย</p>
+        <p class="author">${nw(C.author || "")}</p>
+        <p class="degree">${C.authorDegree || ""}</p>
+        <div class="org">${C.faculty || ""}<br><b>${C.university || ""}</b><br>${C.term}</div>
+      </div>
+    </article>
+    <div class="sheet-actions"><a class="btn btn-solid" href="#/kandungan">ไปที่สารบัญ</a><button type="button" class="btn btn-line" data-opencover>ดูปกนอก</button></div></section>`;
+    window.scrollTo(0, 0);
+  }
+
+  function kandungan() {
+    setNav("kandungan"); document.title = `สารบัญ | ${C.code} ${C.th}`;
+    const row = (no, title, pg, href, extra = "") => `<a class="toc-row" href="${href}"${extra}><span class="toc-no">${no}</span><span class="toc-title">${title}</span><span class="toc-dots" aria-hidden="true"></span><span class="toc-pg">${pg}</span></a>`;
+    const vocabCount = L.reduce((n, l) => n + (l.vocab || []).reduce((m, g) => m + g.items.length, 0), 0);
+    app.innerHTML = `<section class="section"><div class="wrap toc-page">
+      <header class="toc-head"><h1>สารบัญ</h1><p lang="ms">Kandungan</p></header>
+
+      <div class="toc-part"><h2>ส่วนนำ</h2><ul class="toc-list">
+        <li><button type="button" class="toc-row" data-opencover><span class="toc-no"></span><span class="toc-title"><span class="solo">ปกนอก</span></span><span class="toc-dots" aria-hidden="true"></span><span class="toc-pg">หน้าปก</span></button></li>
+        <li>${row("", '<span class="solo">ปกใน</span>', "ผู้เรียบเรียง", "#/kulit-dalam")}</li>
+        <li>${row("", '<span class="solo">ข้อมูลรายวิชา</span>', "CLOs · การวัดผล", "#/kursus")}</li>
+        <li>${row("", '<span class="solo">แผนการเรียน 15 สัปดาห์</span>', "หน้าแรก", "#/")}</li>
+      </ul></div>
+
+      <div class="toc-part"><h2>บทเรียน</h2><ol class="toc-list">${L.map(l => {
+        const d = isDone(l.no);
+        return `<li>${row("บทที่ " + l.no, `<span class="ms" lang="ms">${l.ms}</span><span class="th">${l.th}</span>`, `<span class="${d ? "toc-pg done" : ""}">${d ? "✓ " : ""}สัปดาห์ที่ ${weekOf(l.no)}</span>`, lessonLink(l.no))}
+          <ul class="toc-subs" aria-label="หัวข้อในบทที่ ${l.no}">${sections(l).map(([id, t]) => `<li><a href="${lessonLink(l.no)}/${id}">${t}</a></li>`).join("")}</ul></li>`;
+      }).join("")}</ol></div>
+
+      <div class="toc-part"><h2>ภาคผนวก</h2><ul class="toc-list">
+        <li>${row("", '<span class="solo">คลังคำศัพท์</span>', vocabCount + " คำ", "#/kamus")}</li>
+        <li>${row("", '<span class="solo">เครื่องมือฝึก: ตัวเลข วันที่ เวลา</span>', "บทที่ 6–8", "#/alat")}</li>
+        <li>${row("", '<span class="solo">เอกสารและตำรา · แหล่งเรียนรู้ออนไลน์</span>', "ข้อมูลรายวิชา", "#/kursus")}</li>
+      </ul></div>
+    </div></section>`;
+    window.scrollTo(0, 0);
+  }
+
   function notFound() { app.innerHTML = `<section class="section"><div class="wrap"><h2>ไม่พบหน้านี้</h2><p>ลิงก์อาจพิมพ์ผิด กลับไปที่ <a href="#/">แผนการเรียน</a> เพื่อเลือกบทเรียน</p></div></section>`; }
 
   /* ---------- ปุ่มนำทางด้านล่าง (ทุกหน้า) ---------- */
@@ -383,7 +454,7 @@
   };
   const ico = k => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
   /* ลำดับหน้าสำหรับปุ่ม ก่อนหน้า/ถัดไป */
-  const SEQ = [{ key: "home", href: "#/", name: "แผนการเรียน" }]
+  const SEQ = [{ key: "kulit-dalam", href: "#/kulit-dalam", name: "ปกใน" }, { key: "kandungan", href: "#/kandungan", name: "สารบัญ" }, { key: "home", href: "#/", name: "แผนการเรียน" }]
     .concat(L.map(l => ({ key: "bab" + l.no, href: lessonLink(l.no), name: "บทที่ " + l.no })))
     .concat([{ key: "kamus", href: "#/kamus", name: "คลังคำศัพท์" }, { key: "alat", href: "#/alat", name: "เครื่องมือฝึก" }, { key: "kursus", href: "#/kursus", name: "ข้อมูลรายวิชา" }]);
   function pageNav(key) {
@@ -393,7 +464,8 @@
     nav.innerHTML = `
       <a href="#/"${cur("home")}>${ico("home")}หน้าแรก</a>
       <span class="sep" aria-hidden="true"></span>
-      ${prev ? `<a class="pn-wide" href="${prev.href}" aria-label="ก่อนหน้า: ${prev.name}">${ico("prev")}<span><small>ก่อนหน้า</small>${prev.name}</span></a>`
+      ${key === "kulit-dalam" ? `<button type="button" class="pn-wide" data-opencover aria-label="ก่อนหน้า: ปกนอก">${ico("prev")}<span><small>ก่อนหน้า</small>ปกนอก</span></button>`
+        : prev ? `<a class="pn-wide" href="${prev.href}" aria-label="ก่อนหน้า: ${prev.name}">${ico("prev")}<span><small>ก่อนหน้า</small>${prev.name}</span></a>`
              : `<span class="pn-wide is-off" aria-hidden="true">${ico("prev")}<span><small>ก่อนหน้า</small>—</span></span>`}
       ${next ? `<a class="pn-wide next" href="${next.href}" aria-label="ถัดไป: ${next.name}"><span><small>ถัดไป</small>${next.name}</span>${ico("next")}</a>`
              : `<span class="pn-wide next is-off" aria-hidden="true"><span><small>ถัดไป</small>—</span>${ico("next")}</span>`}
@@ -422,6 +494,8 @@
     app.focus({ preventScroll: true });
   }
   $("#cover-enter").addEventListener("click", closeCover);
+  $$("[data-close-cover]", cover).forEach(a => a.addEventListener("click", closeCover));
+  document.addEventListener("click", e => { if (e.target.closest("[data-opencover]")) openCover(); });
   $("#cover-open").addEventListener("click", openCover);
   $("#cover-skip").addEventListener("change", e => { const s = load(); s.cover = e.target.checked ? "off" : "on"; save(s); toast(e.target.checked ? "จะไม่แสดงหน้าปกอีก เปิดได้จากปุ่ม “หน้าปก” มุมขวาบน" : "จะแสดงหน้าปกทุกครั้งที่เปิดเว็บ"); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !cover.hidden) closeCover(); });
@@ -440,6 +514,8 @@
     else if (p[0] === "kamus") kamus();
     else if (p[0] === "alat") alat();
     else if (p[0] === "kursus") kursus();
+    else if (p[0] === "kulit-dalam") kulitDalam();
+    else if (p[0] === "kandungan") kandungan();
     else notFound();
     app.focus({ preventScroll: true });
   }
