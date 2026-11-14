@@ -29,18 +29,39 @@
     voice = vs.find(v => /^ms([-_]|$)/i.test(v.lang)) || vs.find(v => /^id([-_]|$)/i.test(v.lang)) || null;
   }
   if ("speechSynthesis" in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
-  function speak(text, onend) {
-    if (!("speechSynthesis" in window)) { toast("เบราว์เซอร์นี้ไม่รองรับการอ่านออกเสียง"); return; }
-    speechSynthesis.cancel();
+  function tts(text, onend) {
+    if (!("speechSynthesis" in window)) { toast("เบราว์เซอร์นี้ไม่รองรับการอ่านออกเสียง"); if (onend) onend(); return; }
     const u = new SpeechSynthesisUtterance(strip(text));
     u.lang = voice ? voice.lang : "ms-MY"; if (voice) u.voice = voice; u.rate = 0.88;
     if (onend) { u.onend = onend; u.onerror = onend; }
     speechSynthesis.speak(u);
     if (!voice && !speak.warned) { speak.warned = true; toast("ไม่พบเสียงภาษามลายูในเครื่อง ระบบจะใช้เสียงที่ใกล้เคียงที่สุด"); }
   }
+  /* เสียงบันทึกจริง (audio/bXX/*.mp3 ตาม audio-map.js) เล่นก่อน ถ้าไม่มีไฟล์จะใช้เสียงสังเคราะห์แทน */
+  const AMAP = window.AUDIO_MAP || {}, missing = new Set();
+  let cur = null;
+  const audioId = text => AMAP[strip(text).trim()];
+  const audioUrl = text => { const id = audioId(text); return id && !missing.has(id) ? `audio/${id.slice(0, 3)}/${id}.mp3` : null; };
+  function stopAudio() {
+    if (cur) { cur.onended = cur.onerror = null; cur.pause(); cur = null; }
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
+  }
+  function speak(text, onend) {
+    stopAudio();
+    const url = audioUrl(text);
+    if (!url) return tts(text, onend);
+    const a = new Audio(url); cur = a;
+    a.onended = () => { if (cur === a) cur = null; if (onend) onend(); };
+    a.onerror = () => { missing.add(audioId(text)); if (cur === a) cur = null; tts(text, onend); };
+    const p = a.play(); if (p && p.catch) p.catch(() => {});
+  }
   const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
   const sayBtn = (text, label) => `<button class="say" type="button" data-say="${esc(strip(text))}" aria-label="ฟังเสียง ${esc(label || strip(text))}">${SPK}</button>`;
   document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if (b) speak(b.dataset.say); });
+  const MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>';
+  const recBtn = (text, th) => `<button class="rec" type="button" data-rec="${esc(strip(text))}" data-th="${esc(strip(th || ""))}" aria-label="อัดเสียงเทียบ ${esc(strip(text))}" title="อัดเสียงแล้วฟังเทียบ (Rakam &amp; Banding)">${MIC}</button>`;
+  const acts = (text, th) => `<span class="acts">${sayBtn(text)}${recBtn(text, th)}</span>`;
+  window.BM = { speak, stopAudio, audioUrl, toast, esc, MIC };
 
   /* ---------- Malay language helpers ---------- */
   const U = ["kosong", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "lapan", "sembilan"];
@@ -137,7 +158,7 @@
     return `<div class="tbl-wrap"><table${wide ? ' class="wide"' : ""}><thead><tr>${t.head.map(h => `<th scope="col">${h}</th>`).join("")}${t.say !== undefined ? '<th><span class="sr-only">ฟัง</span></th>' : ""}</tr></thead><tbody>${
       t.rows.map(r => `<tr>${r.map((c, i) => `<td${msCols.includes(i) ? ' class="ms" lang="ms"' : ""}>${c}</td>`).join("")}${t.say !== undefined ? `<td class="say-cell">${sayBtn(r[t.say])}</td>` : ""}</tr>`).join("")}</tbody></table></div>`;
   }
-  const exList = ex => `<div class="tbl-wrap"><table><tbody>${ex.map(([m, t]) => `<tr><td class="ms" lang="ms">${m}</td><td>${t}</td><td class="say-cell">${sayBtn(m)}</td></tr>`).join("")}</tbody></table></div>`;
+  const exList = ex => `<div class="tbl-wrap"><table><tbody>${ex.map(([m, t]) => `<tr><td class="ms" lang="ms">${m}</td><td>${t}</td><td class="say-cell">${acts(m, t)}</td></tr>`).join("")}</tbody></table></div>`;
 
   function renderExercise(ex, idx) {
     const id = `ex${idx}`;
@@ -156,7 +177,7 @@
       body = ex.pairs.map(([l, r], i) => `<div class="q" data-ans='${esc(JSON.stringify([r]))}'><div class="q-row"><span class="q-text ms" lang="ms" style="flex:1 1 200px;margin:0;font-size:18px">${l}</span>
         <select aria-label="ความหมายของ ${esc(l)}"><option value="">เลือกความหมาย</option>${rights.map(x => `<option>${x}</option>`).join("")}</select></div><p class="fb" aria-live="polite"></p></div>`).join("") + `<div class="ex-foot"><button class="btn btn-solid" type="button" data-check="${id}">ตรวจคำตอบ</button><span class="score" aria-live="polite"></span></div>`;
     } else if (ex.type === "speak") {
-      body = `<div class="speak-task prose"><p style="margin:0">${ex.text}</p></div>`;
+      body = `<div class="speak-task prose"><p style="margin:0">${ex.text}</p></div><div class="ex-foot"><button class="btn btn-line" type="button" data-rec="" data-free="1" data-th="${esc(strip(ex.text))}">${MIC.replace("<svg", '<svg width="18" height="18"')} อัดเสียงคำตอบ</button></div>`;
     }
     return `<div class="ex" id="${id}" data-type="${ex.type}"><h3>${ex.title}</h3>${ex.lead ? `<p class="lead">${ex.lead}</p>` : ""}${body}</div>`;
   }
@@ -237,12 +258,12 @@
     if (l.dialog) sec.push(["perbualan", "บทสนทนา", "Perbualan", `
       <p class="scene">${l.scene || ""}</p>
       <div class="dlg-tools"><button type="button" class="chip-btn" data-playall>▶ ฟังทั้งบท</button><button type="button" class="chip-btn" aria-pressed="false" data-hideth>ซ่อนคำแปล</button></div>
-      <ol class="dialog">${l.dialog.map(([w, m, t]) => `<li><span class="who">${w}</span><span><span class="ms" lang="ms">${m}</span><span class="th">${t}</span></span>${sayBtn(m)}</li>`).join("")}</ol>`]);
+      <ol class="dialog">${l.dialog.map(([w, m, t]) => `<li><span class="who">${w}</span><span><span class="ms" lang="ms">${m}</span><span class="th">${t}</span></span>${acts(m, t)}</li>`).join("")}</ol>`]);
     if (l.vocab) sec.push(["kosakata", "คำศัพท์", "Kosa Kata", `
       <div class="dlg-tools"><button type="button" class="chip-btn" data-fc aria-pressed="false">ฝึกด้วยบัตรคำ</button></div>
       <div class="fc-wrap" hidden></div>
       <div class="vlist">${l.vocab.map(g => `${l.vocab.length > 1 ? `<h3 class="vgroup">${g.g}</h3>` : ""}<div class="tbl-wrap"><table class="vt"><thead><tr><th>ภาษามลายู</th><th>ความหมาย</th><th><span class="sr-only">ฟัง</span></th></tr></thead><tbody>${
-        g.items.map(([m, t, nt]) => `<tr><td class="ms" lang="ms">${m}</td><td><span class="th">${t}</span>${nt ? `<br><small style="color:var(--muted)">${nt}</small>` : ""}</td><td class="say-cell">${sayBtn(m)}</td></tr>`).join("")}</tbody></table></div>`).join("")}</div>`]);
+        g.items.map(([m, t, nt]) => `<tr><td class="ms" lang="ms">${m}</td><td><span class="th">${t}</span>${nt ? `<br><small style="color:var(--muted)">${nt}</small>` : ""}</td><td class="say-cell">${acts(m, t)}</td></tr>`).join("")}</tbody></table></div>`).join("")}</div>`]);
     if (l.grammar) sec.push([l.dialog ? "tatabahasa" : "isi", l.dialog ? "หลักภาษา" : "เนื้อหา", l.dialog ? "Tatabahasa" : "", `<div class="prose">${
       l.grammar.map(g => `${g.h ? `<h3>${g.h}</h3>` : ""}${g.p || ""}${g.t ? table(g.t) : ""}${g.ex ? exList(g.ex) : ""}`).join("")}</div>`]);
     if (l.tool) sec.push(["alat", "เครื่องมือฝึก", "", toolHTML(l.tool)]);
@@ -504,7 +525,7 @@
 
   /* ---------- router ---------- */
   function route() {
-    if ("speechSynthesis" in window) speechSynthesis.cancel();
+    stopAudio(); if (window.Rakam) window.Rakam.close();
     clearInterval(home.iv);
     const p = location.hash.replace(/^#\/?/, "").split("/");
     const n = parseInt(p[1], 10);
